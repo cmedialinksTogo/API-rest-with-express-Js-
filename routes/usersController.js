@@ -1,7 +1,7 @@
 var models = require('../models');
 var bcrypt = require('bcrypt');
-var models = require('../utils/jwt.utils');
-const jwtUtils = require('../utils/jwt.utils');
+var jwtUtils = require('../utils/jwt.utils');
+
 //Routes
 module.exports = {
     register: function(req, res){
@@ -47,7 +47,7 @@ module.exports = {
     }); 
 },
 
-    login: function(){
+    login: function(req, res){
         //TODO: to implement
         var email = req.body.email;
         var password  = req.body.password;
@@ -58,15 +58,15 @@ module.exports = {
 
         //TODO verify mail regex and password length
         models.User.findOne({
-            attributes: ['email'],
             where: { email: email }
         })
         .then(function(userFound){
             if(userFound){
+
                 bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt){
                     if(resBycrypt) {
                         return res.status(200).json({
-                            'userId': newUser.id,
+                            'userId': userFound.id,
                             'token': jwtUtils.generateTokenForUser(userFound)
                         });
                     }else{
