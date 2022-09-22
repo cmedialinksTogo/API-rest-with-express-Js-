@@ -1,6 +1,7 @@
 var models = require('../models');
 var bcrypt = require('bcrypt');
-
+var models = require('../utils/jwt.utils');
+const jwtUtils = require('../utils/jwt.utils');
 //Routes
 module.exports = {
     register: function(req, res){
@@ -66,7 +67,7 @@ module.exports = {
                     if(resBycrypt) {
                         return res.status(200).json({
                             'userId': newUser.id,
-                            'token': 'THE TOKEN'
+                            'token': jwtUtils.generateTokenForUser(userFound)
                         });
                     }else{
                         return res.status(403).json({"error": "invalid password" });
