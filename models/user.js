@@ -1,27 +1,18 @@
 'use strict';
-import { Model } from 'sequelize';
-export default (sequelize, DataTypes) => {
-  class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      models.User.hasMany(models.Message);
-
-    }
-  }
-  User.init({
+module.exports = (sequelize, DataTypes) => {
+  var User = sequelize.define('User', {
     email: DataTypes.STRING,
     username: DataTypes.STRING,
     password: DataTypes.STRING,
     bio: DataTypes.STRING,
     isAdmin: DataTypes.BOOLEAN
   }, {
-    sequelize,
-    modelName: 'User',
+    classMethods: {
+      associate: function(models) {
+        // Définitions des associations entre les différents modeles
+        models.User.hasMany(models.Message);
+      }
+    }
   });
   return User;
 };
